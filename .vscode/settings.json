@@ -1,0 +1,35 @@
+{
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go",
+    "editor.insertSpaces": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "files.associations": {
+    "**/.azuredevops/**/*.yml": "azure-pipelines",
+    "docker-compose.yml": "dockercompose",
+    "Taskfile.yml": "yaml"
+  },
+  "terraform.codelens.referenceCount": true,
+  "terraform.experimentalFeatures.prefillRequiredFields": true,
+  "gopls": { "ui.semanticTokens": true },
+  "go.testEnvFile": "${workspaceFolder}/.vscode-test.env",
+  "go.testEnvVars": {
+    "GODEBUG": "netdns=cgo"
+  },
+  "terminal.integrated.env.linux": {
+    "GODEBUG": "netdns=cgo"
+  }
+}
