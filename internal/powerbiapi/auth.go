@@ -8,10 +8,10 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 )
 
-// scopes - Power BI API scopes
+// scopes - Power BI API scopes.
 var scopes = []string{"https://analysis.windows.net/powerbi/api/.default"}
 
-// Authenticate - Authenticates the client
+// Authenticate - Authenticates the client.
 func (c *Client) Authenticate() error {
 	creds, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {

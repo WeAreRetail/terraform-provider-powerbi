@@ -8,10 +8,10 @@ import (
 	"github.com/go-resty/resty/v2"
 )
 
-// BaseURL - Default Power BI URL
+// BaseURL - Default Power BI URL.
 const BaseURL string = "https://api.powerbi.com"
 
-// Client - Power BI API client
+// Client - Power BI API client.
 type Client struct {
 	BaseURL     string
 	RestyClient *resty.Client
@@ -51,7 +51,7 @@ func NewClient(host string) (*Client, error) {
 	return &c, nil
 }
 
-// prepRequest - Prepares a request for the Power BI API
+// prepRequest - Prepares a request for the Power BI API.
 // It sets the global request parameters and returns a pointer to a resty.Request.
 // It returns a pointer to a resty.Request and an error.
 func (c *Client) prepRequest() (*resty.Request, error) {
