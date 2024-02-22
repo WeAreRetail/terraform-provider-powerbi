@@ -134,7 +134,7 @@ func (d *PowerBIWorkspaceDataSource) Configure(ctx context.Context, req datasour
 func (d *PowerBIWorkspaceDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
 	var data models.PowerBIWorkspaceModel
 	var workspace *pbiModels.Group
-	var error error
+	var err error
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -143,17 +143,17 @@ func (d *PowerBIWorkspaceDataSource) Read(ctx context.Context, req datasource.Re
 	}
 
 	if !data.Id.IsNull() {
-		workspace, error = d.client.GetGroup(data.Id.ValueString())
-		if error != nil {
-			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with Id %s", data.Id.ValueString()), error.Error())
+		workspace, err = d.client.GetGroup(data.Id.ValueString())
+		if err != nil {
+			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with Id %s", data.Id.ValueString()), err.Error())
 			return
 		}
 	}
 
 	if !data.Name.IsNull() {
-		workspaces, error := d.client.GetGroups(fmt.Sprintf("name eq '%s'", data.Name.ValueString()), 0, 0)
-		if error != nil {
-			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with name %s", data.Name.ValueString()), error.Error())
+		workspaces, err := d.client.GetGroups(fmt.Sprintf("name eq '%s'", data.Name.ValueString()), 0, 0)
+		if err != nil {
+			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with name %s", data.Name.ValueString()), err.Error())
 			return
 		}
 

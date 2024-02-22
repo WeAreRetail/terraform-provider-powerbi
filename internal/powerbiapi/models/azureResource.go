@@ -1,6 +1,6 @@
 package models
 
-// AzureResource
+// AzureResource.
 type AzureResource struct {
 	Id             string `json:"id"`
 	ResourceGroup  string `json:"resourceGroup"`

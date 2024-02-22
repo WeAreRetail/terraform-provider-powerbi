@@ -214,8 +214,8 @@ func TestGetGroup(t *testing.T) {
 	defer server.Close()
 
 	// Create a client with the test server URL
-	host := server.URL
-	host = "https://api.powerbi.com"
+	// host := server.URL.
+	host := "https://api.powerbi.com"
 	client, err := NewClient(host)
 	assert.NoError(t, err)
 
