@@ -74,6 +74,7 @@ func (p *PowerBIProvider) Resources(ctx context.Context) []func() resource.Resou
 func (p *PowerBIProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewPowerBIWorkspaceDataSource,
+		NewPowerBIWorkspacePermissionsDataSource,
 	}
 }
 

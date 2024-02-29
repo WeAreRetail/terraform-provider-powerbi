@@ -8,28 +8,31 @@ import "fmt"
 // So, we create separate structs for the different types of group users.
 
 type GroupUser struct {
-	DisplayName          string                  `json:"displayName"`
-	EmailAddress         string                  `json:"emailAddress"`
-	GraphId              string                  `json:"graphId"`
-	GroupUserAccessRight GroupUserAccessRight    `json:"groupUserAccessRight"`
-	Identifier           string                  `json:"identifier"`
-	PrincipalType        PrincipalType           `json:"principalType"`
-	Profile              ServicePrincipalProfile `json:"profile"`
-	UserType             string                  `json:"userType"`
+	DisplayName          string                  `json:"displayName"`          // Display name of the principal
+	EmailAddress         string                  `json:"emailAddress"`         // Email address of the user
+	GraphId              string                  `json:"graphId"`              // Identifier of the principal in Microsoft Graph. Only available for admin APIs.
+	GroupUserAccessRight GroupUserAccessRight    `json:"groupUserAccessRight"` // The access right (permission level) that a user has on the workspace
+	Identifier           string                  `json:"identifier"`           // Identifier of the principal
+	PrincipalType        PrincipalType           `json:"principalType"`        // The principal type
+	Profile              ServicePrincipalProfile `json:"profile"`              // A Power BI service principal profile. Only relevant for Power BI Embedded multi-tenancy solution.
+	UserType             string                  `json:"userType"`             // Type of the user
 }
 
+// GroupUserEmail is a structure with the required properties to assign a user to a workspace (group).
 type GroupUserEmail struct {
 	EmailAddress         string               `json:"emailAddress"`
 	GroupUserAccessRight GroupUserAccessRight `json:"groupUserAccessRight"`
 	PrincipalType        PrincipalType        `json:"principalType"`
 }
 
+// GroupUserGroup is a structure with the required properties to assign a group or app to a workspace (group).
 type GroupUserGroup struct {
 	GroupUserAccessRight GroupUserAccessRight `json:"groupUserAccessRight"`
 	Identifier           string               `json:"identifier"`
 	PrincipalType        PrincipalType        `json:"principalType"`
 }
 
+// Validate checks the properties of the GroupUser and returns the correct struct for the API call.
 func (g *GroupUser) Validate() (interface{}, error) {
 
 	if g.EmailAddress != "" {
