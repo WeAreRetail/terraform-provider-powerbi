@@ -2,7 +2,6 @@ package powerbiapi
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"terraform-provider-powerbi/internal/powerbiapi/models"
@@ -215,14 +214,13 @@ func TestGetGroup(t *testing.T) {
 
 	// Create a client with the test server URL
 	// host := server.URL.
-	host := "https://api.powerbi.com"
+	host := server.URL
+	//host = "https://api.powerbi.com"
 	client, err := NewClient(host)
 	assert.NoError(t, err)
 
 	// Call the GetGroup function
 	group, err := client.GetGroup("465d5aaa-c6a7-4add-a618-dc76d27a00ca")
-
-	log.Printf("group: %v", group)
 
 	// Check the result
 	assert.NoError(t, err)
@@ -352,9 +350,8 @@ func TestGetGroups(t *testing.T) {
 	// Call the GetGroup function
 	group, err := client.GetGroups("", 0, 0)
 
-	t.Logf("group: %v", group)
-
 	// Check the result
+	assert.Equal(t, 6, group.ODataCount)
 	assert.NoError(t, err)
 }
 

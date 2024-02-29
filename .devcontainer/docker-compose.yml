@@ -25,4 +25,4 @@ services:
 networks:
   network:
     driver: bridge
-    name: dev_network
+    name: powerbi_network

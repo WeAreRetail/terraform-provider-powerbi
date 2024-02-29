@@ -98,7 +98,7 @@ func (r *PowerBIWorkspaceResource) Delete(ctx context.Context, req resource.Dele
 	tflog.Debug(ctx, fmt.Sprintf("Deleting workspace with name: %s", state.Name.ValueString()))
 	err = r.client.DeleteGroup(state.Id.ValueString())
 	if err != nil {
-		resp.Diagnostics.AddError(fmt.Sprintf("Cannot delete group with Id %s", state.Id.ValueString()), err.Error())
+		resp.Diagnostics.AddError(fmt.Sprintf("Cannot delete workspace with Id %s", state.Id.ValueString()), err.Error())
 		return
 	}
 
@@ -130,7 +130,7 @@ func (r *PowerBIWorkspaceResource) Read(ctx context.Context, req resource.ReadRe
 	tflog.Debug(ctx, fmt.Sprintf("Reading workspace with name: %s", state.Name.ValueString()))
 	workspace, err = r.client.GetGroup(state.Id.ValueString())
 	if err != nil {
-		resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with Id %s", state.Id.ValueString()), err.Error())
+		resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with Id %s", state.Id.ValueString()), err.Error())
 		return
 	}
 
@@ -195,7 +195,7 @@ func (r *PowerBIWorkspaceResource) Update(ctx context.Context, req resource.Upda
 	tflog.Debug(ctx, fmt.Sprintf("Updating workspace with name: %s", state.Name.ValueString()))
 	err = r.client.UpdateGroup(state.Id.ValueString(), updateRequest)
 	if err != nil {
-		resp.Diagnostics.AddError(fmt.Sprintf("Cannot update group with Id %s", state.Id.ValueString()), err.Error())
+		resp.Diagnostics.AddError(fmt.Sprintf("Cannot update workspace with Id %s", state.Id.ValueString()), err.Error())
 		return
 	}
 
@@ -205,7 +205,7 @@ func (r *PowerBIWorkspaceResource) Update(ctx context.Context, req resource.Upda
 	tflog.Debug(ctx, fmt.Sprintf("Reading workspace with name: %s", plan.Name.ValueString()))
 	workspace, err = r.client.GetGroup(state.Id.ValueString())
 	if err != nil {
-		resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with Id %s", state.Id.ValueString()), err.Error())
+		resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with Id %s", state.Id.ValueString()), err.Error())
 		return
 	}
 

@@ -36,3 +36,6 @@ website/vendor
 
 # env files exclusion
 *.env
+
+#Binary exculsions
+terraform-provider-powerbi

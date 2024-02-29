@@ -145,7 +145,7 @@ func (d *PowerBIWorkspaceDataSource) Read(ctx context.Context, req datasource.Re
 	if !data.Id.IsNull() {
 		workspace, err = d.client.GetGroup(data.Id.ValueString())
 		if err != nil {
-			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with Id %s", data.Id.ValueString()), err.Error())
+			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with Id %s", data.Id.ValueString()), err.Error())
 			return
 		}
 	}
@@ -153,12 +153,17 @@ func (d *PowerBIWorkspaceDataSource) Read(ctx context.Context, req datasource.Re
 	if !data.Name.IsNull() {
 		workspaces, err := d.client.GetGroups(fmt.Sprintf("name eq '%s'", data.Name.ValueString()), 0, 0)
 		if err != nil {
-			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with name %s", data.Name.ValueString()), err.Error())
+			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with name %s", data.Name.ValueString()), err.Error())
 			return
 		}
 
 		if len(workspaces.Value) == 0 {
-			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve group with name %s", data.Name.ValueString()), "No groups found")
+			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with name %s", data.Name.ValueString()), "No groups found")
+			return
+		}
+
+		if len(workspaces.Value) > 1 {
+			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with name %s", data.Name.ValueString()), "Multiple groups found")
 			return
 		}
 

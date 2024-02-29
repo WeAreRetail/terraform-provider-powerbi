@@ -8,7 +8,7 @@
             "mode": "debug",
             // this assumes your workspace is the root of the repo
             "program": "${workspaceFolder}",
-            "cwd": "${workspaceFolder}/examples/resources/powerbi_workspace",
+            "cwd": "${workspaceFolder}/examples/data-sources/powerbi_workspace_permissions",
             "env": {
                 "GODEBUG": "netdns=cgo"
             },
