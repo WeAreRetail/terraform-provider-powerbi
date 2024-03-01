@@ -1,5 +1,6 @@
 package models
 
+// PrincipalType represents the type of principal.
 type PrincipalType string
 
 const (

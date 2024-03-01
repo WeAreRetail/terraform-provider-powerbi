@@ -206,7 +206,7 @@ func TestGetGroup(t *testing.T) {
 			"defaultDatasetStorageFormat": "Small",
 			"type": "Workspace",
 			"id": "465d5aaa-c6a7-4add-a618-dc76d27a00ca",
-			"name": "INFRA_TEST"
+			"name": "UNIT_TEST"
 		  }
 		  `)
 	}))
@@ -225,7 +225,7 @@ func TestGetGroup(t *testing.T) {
 	// Check the result
 	assert.NoError(t, err)
 	assert.Equal(t, "465d5aaa-c6a7-4add-a618-dc76d27a00ca", group.Id)
-	assert.Equal(t, "INFRA_TEST", group.Name)
+	assert.Equal(t, "UNIT_TEST", group.Name)
 }
 
 // TestGetGroupUsers tests the GetGroupUsers function.
@@ -292,7 +292,7 @@ func TestGetGroups(t *testing.T) {
 				"isReadOnly": false,
 				"isOnDedicatedCapacity": false,
 				"type": "Workspace",
-				"name": "FINOPS - QA"
+				"name": "Workspace A - QA"
 			  },
 			  {
 				"id": "8b1b14e7-64dd-4d2f-9383-fbcce9910009",
@@ -301,7 +301,7 @@ func TestGetGroups(t *testing.T) {
 				"capacityId": "FEFC7A26-4758-41CD-9069-5E73B7E9DB0E",
 				"defaultDatasetStorageFormat": "Small",
 				"type": "Workspace",
-				"name": "DATA_GATEWAY"
+				"name": "WORKSPACE_B"
 			  },
 			  {
 				"id": "4d8b460c-3b58-4eaf-b1e2-489c1c7b81f7",
@@ -317,14 +317,14 @@ func TestGetGroups(t *testing.T) {
 				"capacityId": "FEFC7A26-4758-41CD-9069-5E73B7E9DB0E",
 				"defaultDatasetStorageFormat": "Small",
 				"type": "Workspace",
-				"name": "INFRA_TEST"
+				"name": "UNIT_TEST"
 			  },
 			  {
 				"id": "70a4c5b6-da4c-44fd-8d69-f11d00ae9148",
 				"isReadOnly": false,
 				"isOnDedicatedCapacity": false,
 				"type": "Workspace",
-				"name": "API_WORKSPACE"
+				"name": "WORKSPACE_C"
 			  },
 			  {
 				"id": "deef788f-0798-4b6c-8b52-e8e2ed39de93",
@@ -333,7 +333,7 @@ func TestGetGroups(t *testing.T) {
 				"capacityId": "FEFC7A26-4758-41CD-9069-5E73B7E9DB0E",
 				"defaultDatasetStorageFormat": "Small",
 				"type": "Workspace",
-				"name": "INFRA_PRD"
+				"name": "WORKSPACE_D"
 			  }
 			]
 		  }
@@ -414,7 +414,7 @@ func TestUpdateGroupUser_User(t *testing.T) {
 
 	// Prepare Request
 	groupUserAccess := &models.GroupUser{
-		EmailAddress:         "cedric.ghiot@weareretail.ai", //"john.doe@example.com",
+		EmailAddress:         "john.doe@example.com",
 		GroupUserAccessRight: models.GroupUserAccessRightAdmin,
 		PrincipalType:        models.PrincipalTypeUser,
 	}
