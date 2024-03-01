@@ -13,22 +13,22 @@ import (
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 )
 
-var _ resource.Resource = &PowerBIWorkspaceResource{}                // Ensure that PowerBIWorkspaceResource implements the Resource interface.
-var _ resource.ResourceWithImportState = &PowerBIWorkspaceResource{} // Ensure that PowerBIWorkspaceResource implements the ResourceWithImportState interface.
-var _ resource.ResourceWithConfigure = &PowerBIWorkspaceResource{}   // Ensure that PowerBIWorkspaceResource implements the ResourceWithConfigure interface.
+var _ resource.Resource = &WorkspaceResource{}                // Ensure that WorkspaceResource implements the Resource interface.
+var _ resource.ResourceWithImportState = &WorkspaceResource{} // Ensure that WorkspaceResource implements the ResourceWithImportState interface.
+var _ resource.ResourceWithConfigure = &WorkspaceResource{}   // Ensure that WorkspaceResource implements the ResourceWithConfigure interface.
 
-// NewPowerBIWorkspaceResource is a function that creates a new instance of the PowerBIWorkspaceResource.
-func NewPowerBIWorkspaceResource() resource.Resource {
-	return &PowerBIWorkspaceResource{}
+// NewWorkspaceResource is a function that creates a new instance of the WorkspaceResource.
+func NewWorkspaceResource() resource.Resource {
+	return &WorkspaceResource{}
 }
 
-// PowerBIWorkspaceResource is a struct that represents the Power BI workspace resource.
-type PowerBIWorkspaceResource struct {
+// WorkspaceResource is a struct that represents the Power BI workspace resource.
+type WorkspaceResource struct {
 	client *powerbiapi.Client
 }
 
-// Configure configures the PowerBIWorkspaceResource.
-func (r *PowerBIWorkspaceResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+// Configure configures the WorkspaceResource.
+func (r *WorkspaceResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -49,9 +49,9 @@ func (r *PowerBIWorkspaceResource) Configure(_ context.Context, req resource.Con
 }
 
 // Create creates a new Power BI workspace.
-func (r *PowerBIWorkspaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var config models.PowerBIWorkspaceModel
-	var state models.PowerBIWorkspaceModel
+func (r *WorkspaceResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var config models.Workspace
+	var state models.Workspace
 	var workspace *pbiModels.Group
 	var err error
 
@@ -85,8 +85,8 @@ func (r *PowerBIWorkspaceResource) Create(ctx context.Context, req resource.Crea
 }
 
 // Delete deletes the Power BI workspace.
-func (r *PowerBIWorkspaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state models.PowerBIWorkspaceModel
+func (r *WorkspaceResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state models.Workspace
 	var err error
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
@@ -106,18 +106,18 @@ func (r *PowerBIWorkspaceResource) Delete(ctx context.Context, req resource.Dele
 }
 
 // ImportState implements resource.ResourceWithImportState.
-func (r *PowerBIWorkspaceResource) ImportState(_ context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+func (r *WorkspaceResource) ImportState(_ context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
 	panic("unimplemented")
 }
 
-// Metadata sets the metadata for the PowerBIWorkspaceResource.
-func (r *PowerBIWorkspaceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+// Metadata sets the metadata for the WorkspaceResource.
+func (r *WorkspaceResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_workspace"
 }
 
 // Read updates the state with the data from the Power BI service.
-func (r *PowerBIWorkspaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state models.PowerBIWorkspaceModel
+func (r *WorkspaceResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state models.Workspace
 	var workspace *pbiModels.Group
 	var err error
 
@@ -146,8 +146,8 @@ func (r *PowerBIWorkspaceResource) Read(ctx context.Context, req resource.ReadRe
 	}
 }
 
-// Schema sets the schema for the PowerBIWorkspaceResource.
-func (r *PowerBIWorkspaceResource) Schema(_ context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+// Schema sets the schema for the WorkspaceResource.
+func (r *WorkspaceResource) Schema(_ context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Power BI workspace resource",
@@ -172,11 +172,11 @@ func (r *PowerBIWorkspaceResource) Schema(_ context.Context, req resource.Schema
 	}
 }
 
-// Update implements resource.ResourceWithConfigure.
-func (r *PowerBIWorkspaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+// Update updates the Power BI workspace.
+func (r *WorkspaceResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
 
-	var plan models.PowerBIWorkspaceModel
-	var state models.PowerBIWorkspaceModel
+	var plan models.Workspace
+	var state models.Workspace
 	var workspace *pbiModels.Group
 	var updateRequest *pbiModels.UpdateGroupRequest
 	var err error

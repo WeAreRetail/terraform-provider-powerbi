@@ -14,28 +14,28 @@ import (
 )
 
 var (
-	_ datasource.DataSource                   = &PowerBIWorkspacePermissionsDataSource{} // Ensure that PowerBIWorkspacePermissionsDataSource implements the DataSource interface.
-	_ datasource.DataSourceWithValidateConfig = &PowerBIWorkspacePermissionsDataSource{} // Ensure that PowerBIWorkspacePermissionsDataSource implements the DataSourceWithValidateConfig interface.
-	_ datasource.DataSourceWithConfigure      = &PowerBIWorkspacePermissionsDataSource{} // Ensure that PowerBIWorkspacePermissionsDataSource implements the DataSourceWithConfigure interface.
+	_ datasource.DataSource                   = &WorkspacePermissionsDataSource{} // Ensure that WorkspacePermissionsDataSource implements the DataSource interface.
+	_ datasource.DataSourceWithValidateConfig = &WorkspacePermissionsDataSource{} // Ensure that WorkspacePermissionsDataSource implements the DataSourceWithValidateConfig interface.
+	_ datasource.DataSourceWithConfigure      = &WorkspacePermissionsDataSource{} // Ensure that WorkspacePermissionsDataSource implements the DataSourceWithConfigure interface.
 )
 
-// NewPowerBIWorkspacePermissionsDataSource is a function that creates a new instance of the PowerBIWorkspacePermissionsDataSource.
-func NewPowerBIWorkspacePermissionsDataSource() datasource.DataSource {
-	return &PowerBIWorkspacePermissionsDataSource{}
+// NewWorkspacePermissionsDataSource is a function that creates a new instance of the WorkspacePermissionsDataSource.
+func NewWorkspacePermissionsDataSource() datasource.DataSource {
+	return &WorkspacePermissionsDataSource{}
 }
 
-// PowerBIWorkspacePermissionsDataSource is a struct that represents the Power BI Workspace Permissions data source.
-type PowerBIWorkspacePermissionsDataSource struct {
+// WorkspacePermissionsDataSource is a struct that represents the Power BI Workspace Permissions data source.
+type WorkspacePermissionsDataSource struct {
 	client *powerbiapi.Client
 }
 
-// Metadata is a method that sets the metadata for the PowerBIWorkspacePermissionsDataSource.
-func (d *PowerBIWorkspacePermissionsDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+// Metadata is a method that sets the metadata for the WorkspacePermissionsDataSource.
+func (d *WorkspacePermissionsDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_workspace_permissions"
 }
 
-// Schema is a method that sets the schema for the PowerBIWorkspacePermissionsDataSource.
-func (d *PowerBIWorkspacePermissionsDataSource) Schema(_ context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+// Schema is a method that sets the schema for the WorkspacePermissionsDataSource.
+func (d *WorkspacePermissionsDataSource) Schema(_ context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
 		MarkdownDescription: "Power BI workspace permissions data source",
@@ -106,7 +106,7 @@ func (d *PowerBIWorkspacePermissionsDataSource) Schema(_ context.Context, req da
 	}
 }
 
-// ValidateConfig validates the configuration for the PowerBIWorkspacePermissionsDataSource.
+// ValidateConfig validates the configuration for the WorkspacePermissionsDataSource.
 // It checks if either the 'name' or 'id' attribute is set, and adds an error to the response diagnostics if both are empty or both are non-empty.
 // If there are any errors in the response diagnostics, the function returns without further processing.
 // Parameters:
@@ -115,8 +115,8 @@ func (d *PowerBIWorkspacePermissionsDataSource) Schema(_ context.Context, req da
 //   - resp: The ValidateConfigResponse object to store the validation results.
 //
 // Returns: None.
-func (d *PowerBIWorkspacePermissionsDataSource) ValidateConfig(ctx context.Context, req datasource.ValidateConfigRequest, resp *datasource.ValidateConfigResponse) {
-	var data models.PowerBIWorkspacePermissionsModel
+func (d *WorkspacePermissionsDataSource) ValidateConfig(ctx context.Context, req datasource.ValidateConfigRequest, resp *datasource.ValidateConfigResponse) {
+	var data models.WorkspacePermissionsData
 
 	resp.Diagnostics.Append(req.Config.Get(ctx, &data)...)
 
@@ -136,7 +136,7 @@ func (d *PowerBIWorkspacePermissionsDataSource) ValidateConfig(ctx context.Conte
 	}
 }
 
-// Configure is a method that configures the PowerBIWorkspacePermissionsDataSource.
+// Configure is a method that configures the WorkspacePermissionsDataSource.
 // It creates a new instance of the powerbiapi.Client with the specified base URL.
 // If an error occurs while creating the client, an error is added to the response diagnostics.
 // Parameters:
@@ -145,7 +145,7 @@ func (d *PowerBIWorkspacePermissionsDataSource) ValidateConfig(ctx context.Conte
 //   - resp: The ConfigureResponse object to store the configuration results.
 //
 // Returns: None.
-func (d *PowerBIWorkspacePermissionsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *WorkspacePermissionsDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -174,8 +174,8 @@ func (d *PowerBIWorkspacePermissionsDataSource) Configure(ctx context.Context, r
 //   - resp: The ReadResponse object to store the read results.
 //
 // Returns: None.
-func (d *PowerBIWorkspacePermissionsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
-	var data models.PowerBIWorkspacePermissionsModel
+func (d *WorkspacePermissionsDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
+	var data models.WorkspacePermissionsData
 	var workspace *pbiModels.Group
 	var workspaceUsers *pbiModels.GroupUsers
 	var err error
@@ -186,6 +186,7 @@ func (d *PowerBIWorkspacePermissionsDataSource) Read(ctx context.Context, req da
 		return
 	}
 
+	// If the workspace id is set, retrieve the workspace and its users by id
 	if !data.WorkspaceId.IsNull() {
 
 		workspace, err = d.client.GetGroup(data.WorkspaceId.ValueString())
@@ -201,6 +202,8 @@ func (d *PowerBIWorkspacePermissionsDataSource) Read(ctx context.Context, req da
 		}
 	}
 
+	// If the workspace name is set, retrieve the workspace and its users by name.
+	// It relies on the GetGroups method to retrieve the workspace by name, and then retrieves the workspace and its users by id.
 	if !data.WorkspaceName.IsNull() {
 		workspaces, err := d.client.GetGroups(fmt.Sprintf("name eq '%s'", data.WorkspaceName.ValueString()), 0, 0)
 
@@ -210,12 +213,12 @@ func (d *PowerBIWorkspacePermissionsDataSource) Read(ctx context.Context, req da
 		}
 
 		if len(workspaces.Value) == 0 {
-			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with name %s", data.WorkspaceName.ValueString()), "No groups found")
+			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with name %s", data.WorkspaceName.ValueString()), "No workspace found")
 			return
 		}
 
 		if len(workspaces.Value) > 1 {
-			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with name %s", data.WorkspaceName.ValueString()), "Multiple groups found")
+			resp.Diagnostics.AddError(fmt.Sprintf("Cannot retrieve workspace with name %s", data.WorkspaceName.ValueString()), "Multiple workspace found")
 			return
 		}
 
@@ -239,10 +242,10 @@ func (d *PowerBIWorkspacePermissionsDataSource) Read(ctx context.Context, req da
 	}
 
 	// Loop on the workspace users and populate the data
-	var permissions []models.PowerBIWorkspacePermissionModel
+	var permissions []models.WorkspacePermission
 
 	for _, user := range workspaceUsers.Value {
-		var permission models.PowerBIWorkspacePermissionModel
+		var permission models.WorkspacePermission
 
 		permission.DisplayName = types.StringValue(user.DisplayName)
 
@@ -264,17 +267,35 @@ func (d *PowerBIWorkspacePermissionsDataSource) Read(ctx context.Context, req da
 			permission.AccessRight = types.StringNull()
 		}
 
-		//TODO: manage nil
-		permission.Identifier = types.StringValue(user.Identifier)
-
-		permission.PrincipalType = types.StringValue(string(user.PrincipalType))
-
-		permission.Profile = models.ServicePrincipalProfile{
-			DisplayName: types.StringValue(user.Profile.DisplayName),
-			Id:          types.StringValue(user.Profile.Id),
+		if user.Identifier != "" {
+			permission.Identifier = types.StringValue(user.Identifier)
+		} else {
+			permission.Identifier = types.StringNull()
 		}
 
-		permission.UserType = types.StringValue(user.UserType)
+		if user.PrincipalType != "" {
+			permission.PrincipalType = types.StringValue(string(user.PrincipalType))
+		} else {
+			permission.PrincipalType = types.StringNull()
+		}
+
+		if user.Profile.DisplayName != "" || user.Profile.Id != "" {
+			permission.Profile = models.ServicePrincipalProfile{
+				DisplayName: types.StringValue(user.Profile.DisplayName),
+				Id:          types.StringValue(user.Profile.Id),
+			}
+		} else {
+			permission.Profile = models.ServicePrincipalProfile{
+				DisplayName: types.StringNull(),
+				Id:          types.StringNull(),
+			}
+		}
+
+		if user.UserType != "" {
+			permission.UserType = types.StringValue(user.UserType)
+		} else {
+			permission.UserType = types.StringNull()
+		}
 
 		permissions = append(permissions, permission)
 	}
