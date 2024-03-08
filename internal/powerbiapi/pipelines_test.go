@@ -54,3 +54,40 @@ func TestGetPipeline(t *testing.T) {
 	assert.Equal(t, "57eb01e2-2803-4d0d-ae65-8fd112ae5b7c", pipeline.Id)
 	assert.Equal(t, "wksPipeline", pipeline.DisplayName)
 }
+
+func TestCreatePipeline(t *testing.T) {
+	// Create a test server
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Check the request URL
+		assert.Equal(t, "/v1.0/myorg/pipelines", r.URL.Path)
+
+		// Check the request method
+		assert.Equal(t, http.MethodPost, r.Method)
+
+		// Send a mock response
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprint(w, `{
+			  "@odata.context": "http://wabi-france-central-a-primary-redirect.analysis.windows.net/v1.0/myorg/$metadata#pipelines/$entity",
+			  "id": "70ab2a0e-77ec-43d1-a473-efb6058ba37d",
+			  "displayName": "test_pipeline",
+			  "description": "test Pipeline"
+		  }
+		  `)
+	}))
+	defer server.Close()
+
+	// Create a client with the test server URL
+	host := server.URL
+	//host := "https://api.powerbi.com"
+	client, err := NewClient(host)
+	assert.NoError(t, err)
+
+	// Call the CreatePipeline function
+	pipeline, err := client.CreatePipeline("test_pipeline", "test Pipeline")
+
+	// Check the result
+	assert.NoError(t, err)
+	assert.Equal(t, "test_pipeline", pipeline.DisplayName)
+	assert.Equal(t, "test Pipeline", pipeline.Description)
+}

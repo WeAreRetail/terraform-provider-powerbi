@@ -31,3 +31,28 @@ func (c *Client) GetPipeline(pipelineId string) (*models.Pipeline, error) {
 
 	return pipeline, nil
 }
+
+func (c *Client) CreatePipeline(displayName string, description string) (*models.Pipelines, error) {
+	// POST https://api.powerbi.com/v1.0/myorg/groups
+
+	var err error
+	pipeline := &models.Pipelines{}
+
+	client, err := c.prepRequest()
+	if err != nil {
+		return nil, fmt.Errorf("failed to prepare the request for CreatePipeline: %v", err)
+	}
+
+	resp, err := client.SetResult(pipeline).
+		SetBody(&models.PipelineCreationRequest{DisplayName: displayName, Description: description}).
+		Post("/v1.0/myorg/pipelines")
+	if err != nil {
+		return nil, fmt.Errorf("failed to create pipeline: %v", err)
+	}
+
+	if resp.IsError() {
+		return nil, fmt.Errorf("failed to create pipeline: %v", resp.Error())
+	}
+
+	return pipeline, nil
+}
