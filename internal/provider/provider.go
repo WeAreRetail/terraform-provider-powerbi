@@ -68,6 +68,7 @@ func (p *PowerBIProvider) Configure(ctx context.Context, req provider.ConfigureR
 func (p *PowerBIProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewWorkspaceResource,
+		NewPipelineResource,
 	}
 }
 
